@@ -2,9 +2,9 @@
 <html>
 <body>
 
-<p>If a browser cannot find the image, it will display the alternate text:</p>
+<h1>The img element</h1>
 
-<img src="https://w0.peakpx.com/wallpaper/196/34/HD-wallpaper-virat-kohli-in-blue-jersey-virat-kohli-blue-indian-cricket-king-kohli-sports.jpg" alt="Flowers in Chania">
+<img src="https://wallpapercave.com/wp/wp3993991.jpg" alt="Girl in a jacket" width="800" height="900">
 
 </body>
 </html>
