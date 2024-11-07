@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+    tools {
+	    jdk 'java8'
+	}
+    stages {
+        stage('CLONE SCM') {
+            steps {
+                echo 'Cloning fb-app project code'
+				git branch: 'main', url: 'https://github.com/vinaykohli1/vinay-mindcircuit13.git'
+            }
+        }
+		
+		stage('Build Artifact') {
+            steps {
+                echo 'Generating artifact with maven build tool'
+				sh 'mvn clean install'
+            }
+        }
+		
+		stage('Upload to nexus artifactory') {
+            steps {
+                echo 'Upload to nexus artifactory'
+				sh 'mvn clean deploy'
+            }
+        }
+		
+		stage('Deploy to tomcat') {
+            steps {
+                echo 'Deploying artifact to tomcat webserver'
+				deploy adapters: [tomcat9(credentialsId: 'kohli', path: '', url: 'http://34.207.192.197:8091/')], contextPath: 'kohli', war: '**/*.war\\'
+            }
+        }
+    }
+}
