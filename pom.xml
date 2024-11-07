@@ -17,12 +17,12 @@
 	<distributionManagement>
 		 <snapshotRepository>
 		    <id>VinayRepo</id>
-		    <url>http://3.89.128.142:8081/repository/vinay-repository-snapshot/</url>
+		    <url>http://44.212.61.233:8081/repository/vinay-repo-snapshot/</url>
 		 </snapshotRepository>
 		
 		<repository>
 		    <id>VinayRepo</id>
-		    <url>http://3.89.128.142:8081/repository/vinay-repository/</url>
+		    <url>http://44.212.61.233:8081/repository/vinay-repository/</url>
 		</repository>
   	</distributionManagement>
 
