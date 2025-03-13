@@ -17,9 +17,9 @@ spec:
     spec:
       containers:
       - name: mc-app
-        image: devopshubg333/batch13:mindcircuit13img
+        image: vinaydoc326/vinayrepo:httpdimage
         ports:
-        - containerPort: 8080
+        - containerPort: 80
 
   
 
