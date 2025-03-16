@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: mc-app
-        image: vinaydoc326/vinayrepo:vinaytag
+        image: vinaydoc326/vinayrepo:8
         ports:
         - containerPort: 8080
 
