@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+	 
+	  tools {
+	    maven 'maven3'
+    }
+     stages {
+        stage('checkout') {
+            steps {
+			    echo 'cloning GITHUB repo'
+                git branch: 'main', url: 'https://github.com/vinaykohli1/vinay-mindcircuit13.git'
+            }
+        }
+		
+     stage('sonar') {
+            steps {
+			    echo 'scanning project'
+				sh 'ls -ltr'
+				
+                sh '''mvn sonar:sonar \\
+                     -Dsonar.host.url=http://98.84.197.17:9000 \\
+                     -Dsonar.login=squ_dd03bb41da58a546b1efdbd733973b94f100f96c'''
+            }
+        }
+		
+	 stage('Build Artifact') {
+            steps {
+			    echo 'Build Artifact'
+                sh 'mvn clean package'
+            }
+        }
+		
+	 stage('Docker image') {
+            steps {
+			    echo 'Docker image building'
+                sh 'docker build -t vinaydoc326/vinayrepo:${BUILD_NUMBER} .'
+			}
+		}
+		
+	 stage('Push to dockerhub') {
+            steps {
+			  script{
+			 withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) 
+			 {
+		     sh 'docker login -u vinaydoc326 -p ${dockerhub}'
+			 
+			  }
+				sh 'docker push vinaydoc326/vinayrepo:${BUILD_NUMBER}'
+					
+                 }
+			}
+		}
+
+      stage('update deployment file') {
+	    environment{
+		   GIT_REPO_NAME= "vinay-mindcircuit13"
+		   GIT_USER_NAME= "vinaykohli1"
+		   }
+            steps {
+			    echo 'Docker image building'
+                withCredentials([string(credentialsId: 'githubtoken', variable: 'githubtoken')]) 
+				{
+                sh '''
+				   git config user.mail "vinaykumarbusi5@gmail.com"
+				   git config user.name "vinay"
+				   BUILD_NUMBER=${BUILD_NUMBER}
+				   sed -i "s/vinayrepo:.*/vinayrepo:${BUILD_NUMBER}/g" deploymentfiles/deployment.yml
+				   git add .
+				   
+				   git commit -m "update deployment image to version ${BUILD_NUMBER}"
+				   
+				   git push https://${githubtoken}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+			   '''   
+			}
+        }			
+     }
+		
+    }
+}
